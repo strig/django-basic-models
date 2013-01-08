@@ -18,14 +18,14 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import models
 from django.template.defaultfilters import slugify
-from cachemodel import models as cachemodels
 from copy import deepcopy
 import re
+import cachemodel
 
 from basic_models.managers import HasActiveManager, IsActiveManager, SlugModelManager, IsActiveSlugModelManager, OnlyOneActiveManager
 
 
-class ActiveModel(cachemodels.CacheModel):
+class ActiveModel(cachemodel.CacheModel):
     is_active = models.BooleanField(default=True, db_index=True)
     objects = HasActiveManager()
     active_objects = IsActiveManager()

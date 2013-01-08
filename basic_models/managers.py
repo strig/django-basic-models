@@ -16,18 +16,18 @@
 
 
 from django.core.cache import cache
-from cachemodel import models as cachemodels
+import cachemodel
 from django.conf import settings
 from django.db.models.query import QuerySet
 
 
-class HasActiveManager(cachemodels.CacheModelManager):
+class HasActiveManager(cachemodel.CacheModelManager):
     use_for_related_fields = True
 
     def active(self):
         return self.filter(is_active=True)
 
-class IsActiveManager(cachemodels.CacheModelManager):
+class IsActiveManager(cachemodel.CacheModelManager):
     def get_query_set(self):
         return super(IsActiveManager, self).get_query_set().filter(is_active=True)
 
@@ -45,7 +45,7 @@ class IsActiveSlugModelManager(IsActiveManager):
     def get_by_slug(self, slug, cache_timeout=None):
         return self.get_by("slug", slug, cache_timeout)
 
-class OnlyOneActiveManager(cachemodels.CacheModelManager):
+class OnlyOneActiveManager(cachemodel.CacheModelManager):
     def get_active(self):
         cache_key = 'active_%s' % (self.model.__name__)
         active = cache.get(cache_key)
