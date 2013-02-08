@@ -14,7 +14,7 @@
 
 
 from django import forms
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.cache import cache
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -44,8 +44,8 @@ class TimestampedModel(models.Model):
 
 
 class UserModel(models.Model):
-    created_by = models.ForeignKey(User, related_name='%(class)s_created', null=True, blank=True, on_delete=models.SET_NULL)
-    updated_by = models.ForeignKey(User, related_name='%(class)s_updated', null=True, blank=True, on_delete=models.SET_NULL)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_created', null=True, blank=True, on_delete=models.SET_NULL)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_updated', null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         abstract = True
