@@ -49,20 +49,26 @@ class ActiveModelAdmin(ModelAdmin):
     """ModelAdmin subclass that adds activate and delete actions and situationally removes the delete action"""
     actions = ['activate_objects', 'deactivate_objects']
 
+    def _set_objects_active(self, request, queryset, active):
+        """ Sets the 'is_active' property of each item in ``queryset`` to ``active`` and reports success to the user. """
+        # We call save on each object instead of using queryset.update to allow for custom save methods and hooks.
+        count = 0
+        for obj in queryset.select_for_update():
+            obj.is_active = active
+            obj.save(update_fields=['is_active'])
+            count += 1
+        self.message_user(request, _("Successfully %(prefix)sactivated %(count)d %(items)s.") % {
+            "prefix": "" if active else "de", "count": count, "items": model_ngettext(self.opts, count)
+        })
+
     def activate_objects(self, request, queryset):
         """Admin action to set is_active=True on objects"""
-        count = queryset.update(is_active=True)
-        self.message_user(request, _("Successfully activated %(count)d %(items)s.") % {
-            "count": count, "items": model_ngettext(self.opts, count)
-        })
+        self._set_objects_active(request, queryset, True)
     activate_objects.short_description = "Activate selected %(verbose_name_plural)s"
 
     def deactivate_objects(self, request, queryset):
         """Admin action to set is_active=False on objects"""
-        count = queryset.update(is_active=False)
-        self.message_user(request, _("Successfully deactivated %(count)d %(items)s.") % {
-            "count": count, "items": model_ngettext(self.opts, count)
-        })
+        self._set_objects_active(request, queryset, False)
     deactivate_objects.short_description = "Deactivate selected %(verbose_name_plural)s"
 
     def get_actions(self, request):
