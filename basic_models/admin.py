@@ -15,6 +15,7 @@
 from django.contrib.admin import ModelAdmin
 from django.utils.translation import ugettext_lazy, ugettext as _
 from django.contrib.admin.util import model_ngettext
+from django.db import transaction
 
 
 __all__ = ['UserModelAdmin', 'DefaultModelAdmin', 'SlugModelAdmin', 'OneActiveAdmin']
@@ -49,6 +50,7 @@ class ActiveModelAdmin(ModelAdmin):
     """ModelAdmin subclass that adds activate and delete actions and situationally removes the delete action"""
     actions = ['activate_objects', 'deactivate_objects']
 
+    @transaction.atomic
     def _set_objects_active(self, request, queryset, active):
         """ Sets the 'is_active' property of each item in ``queryset`` to ``active`` and reports success to the user. """
         # We call save on each object instead of using queryset.update to allow for custom save methods and hooks.
