@@ -1,9 +1,0 @@
-{% extends "admin/change_form.html" %}
-{% load i18n admin_static admin_modify %}
-{% load admin_urls %}
-
-{% block object-tools-items %}
-    <li><a href="history/" class="historylink">{% trans "History" %}</a></li>
-    {% if has_absolute_url %}<li><a href="{% if original.is_active%}../../../r/{{ content_type_id }}/{{ object_id }}/{% else %}{{original.get_absolute_url}}?id={{object_id}}{% endif %}" class="viewsitelink">{% if original and original.is_active%}{% trans "View on site" %}{% else %}{% trans "Preview" %}{% endif %}</a></li>{% endif%}
-
-{% endblock %}

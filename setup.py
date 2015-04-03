@@ -1,4 +1,4 @@
-# Copyright 2011 Concentric Sky, Inc.
+# Copyright 2015 Concentric Sky, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ setup(
     packages = find_packages(),
     package_data = find_package_data(basic_models=['templates',]),
     install_requires = [
-        "django-autoslug==1.7.2"
     ],
 
     author = 'Concentric Sky',

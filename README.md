@@ -14,50 +14,68 @@ Django Basic Models is an open-source Django library developed by [Concentric Sk
 
 ## Installation
 
-    pip install git+https://github.com/concentricsky/django-skythumbnails.git
+    pip install git+https://github.com/concentricsky/django-basic-models.git
 
 
 ## Getting Started
 
-The models available to inherit from are ActiveModel, TimestampedModel, UserModel, DefaultModel, SlugModel, OnlyOneActiveModel. To use them, import basic_models in your models.py file and inherit from one 
+models.py
 
-	from basic_models import SlugModel
+	from basic_models import CreatedEditedAt, CreatedEditedBy, IsActive, NameSlug, TitleBody
 
-	class MyModel(SlugModel):
+	class MyModel(CreatedEditedAt, CreatedEditedBy, IsActive, NameSlug, TitleBody):
 		pass
 
+admin.py
 
-### ActiveModel
+    from basic_models.admin import site
 
-ActiveModel provides a boolean field called `is_active`, and allows filtering by that field with the standard manager as well as a custom `active_objects` manager. 
+    class MyModelAdmin(actions.Clone, actions.SetIsActive):
+        list_display = ('__unicode__', 'is_active')
 
-```
-# Both return only objects with is_active=True
-MyModel.objects.active()
-MyModel.active_objects.all()
-```
+    site.register(MyModel, MyModelAdmin)
 
-### TimestampedModel
+### CreatedUpdatedAt
 
-TimestampedModel provides two datetime fields, `created_at` and `updated_at` that auto update on save.
-
-### UserModel
-
-UserModel provides two foreign keys to the auth user model, `created_by` and `updated_by`. Both fields should be set on save using the request.user.
-
-### DefaultModel
-
-DefaultModel combines the three models above: UserModel, TimestampedModel, and ActiveModel.
-
-### SlugModel
-
-SlugModel extends DefaultModel and adds `name` and `slug` charfields.
-
-### OnlyOneActiveModel
-
-OnlyOneActiveModel extends ActiveModel, but deactivates all other instances of the model if one is activated. It also provides a manager function called `get_active()` that returns the one active instance for the model.
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
+### CreatedUpdatedBy
+
+    created_by = models.ForeignKey(AUTH_USER_MODEL, null=True, blank=True,
+                                   related_name='+',
+                                   on_delete=models.SET_NULL)
+    updated_by = models.ForeignKey(AUTH_USER_MODEL, null=True, blank=True,
+                                   related_name='+',
+                                   on_delete=models.SET_NULL)
+
+### IsActive
+
+    is_active = models.BooleanField()
+
+    MyModel.active_objects.all()
+
+### NameSlug
+
+    name = models.CharField(max_length=255)
+    slug = models.SlugField()
+
+
+### TitleBody
+
+    title = models.CharField(max_length=255)
+    body = models.TextField()
+
+
+### OnlyOneActive(models.Model):
+
+    def save(self, *args, **kwargs):
+        super(OnlyOneActive, self).save(*args, **kwargs)
+        # If we were made active, deactivate all other instances
+        if self.is_active:
+            self.__class__.objects.filter(is_active=True).exclude(pk=self.pk) \
+                .update(is_active=False)
 
 ## License
 
