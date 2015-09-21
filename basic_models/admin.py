@@ -33,6 +33,16 @@ class UserModelAdmin(ModelAdmin):
 
     def save_formset(self, request, form, formset, change):
         instances = formset.save(commit=False)
+
+        try:
+            # For Django 1.7+
+            for obj in formset.deleted_objects:
+                obj.delete()
+        except AssertionError:
+            # Django 1.6 and earlier already deletes the objects, trying to
+            # delete them a second time raises an AssertionError.
+            pass
+
         for instance in instances:
             self._update_instance(instance, request.user)
             instance.save()
