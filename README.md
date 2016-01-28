@@ -21,7 +21,7 @@ Django Basic Models is an open-source Django library developed by [Concentric Sk
 
 models.py
 
-	from basic_models import CreatedEditedAt, CreatedEditedBy, IsActive, NameSlug, TitleBody
+	from basic_models.models import CreatedEditedAt, CreatedEditedBy, IsActive, NameSlug, TitleBody
 
 	class MyModel(CreatedEditedAt, CreatedEditedBy, IsActive, NameSlug, TitleBody):
 		pass
