@@ -59,9 +59,10 @@ class AutoGroupMeta(ModelAdmin):
             lambda field: hasattr(obj, field) and field not in exclude,
             meta_fields)
 
-        meta_grouped.append(
-            ('Meta', {'fields': fields, 'classes': ('collapse',)})
-        )
+        if fields:
+            meta_grouped.append(
+                ('Meta', {'fields': fields, 'classes': ('collapse',)})
+            )
 
         return meta_grouped
 

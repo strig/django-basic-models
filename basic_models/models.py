@@ -4,7 +4,7 @@ from django.db import models
 try:
     from natural_key.mixins import NaturalKey
 except ImportError:
-    class NaturalKey:
+    class NaturalKey(object):
         pass
 
 from .managers import ActiveObjectsManager
