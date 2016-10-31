@@ -48,10 +48,11 @@ class AutoGroupMeta(ModelAdmin):
 
         # Remove Meta fields from any defined fieldsets
         for fieldset in fieldsets:
-            key, fields = fieldset
-            non_meta_fields = filter(lambda field: field not in meta_fields,
-                                     fields['fields'])
-            meta_grouped.append((key, {'fields': non_meta_fields}))
+            key, field_options = fieldset
+            field_options['fields'] = filter(
+                lambda field_name: field_name not in meta_fields,
+                field_options['fields'])
+            meta_grouped.append((key, field_options))
 
         # Add meta fields (if they exist on the instance) to a Meta fieldset
         exclude = self.exclude or []
