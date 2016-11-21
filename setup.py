@@ -38,6 +38,7 @@ setup(
     packages = find_packages(),
     package_data = find_package_data(basic_models=['templates',]),
     install_requires = [
+        'django-autoslug',
     ],
 
     author = 'Concentric Sky',

@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 
+from autoslug import AutoSlugField
+
 try:
     from natural_key.mixins import NaturalKey
 except ImportError:
@@ -15,7 +17,7 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 class NameSlug(NaturalKey, models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = AutoSlugField(unique=True, populate_from='name')
 
     def __unicode__(self):
         return self.name

@@ -24,10 +24,6 @@ class CreatedUpdatedBy(ModelAdmin):
         formset.save_m2m()
 
 
-class NameSlug(ModelAdmin):
-    prepopulated_fields = {'slug': ('name',)}
-
-
 class AutoGroupMeta(ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):

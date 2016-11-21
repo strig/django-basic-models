@@ -1,5 +1,7 @@
 from django.contrib.admin import site as admin_site
-from .admin import CreatedUpdatedBy, NameSlug, LocalPreview, AutoGroupMeta
+
+from basic_models.actions import SetIsActive, HideDeleteAction
+from .admin import CreatedUpdatedBy, LocalPreview, AutoGroupMeta
 
 
 class site(object):
@@ -19,11 +21,10 @@ class site(object):
         if _list_has_all_values(field_names, ('created_by', 'updated_by')):
             site.add_base(admin_class, CreatedUpdatedBy)
 
-        if _list_has_all_values(field_names, ('name', 'slug')):
-            site.add_base(admin_class, NameSlug)
-
         if 'is_active' in field_names:
             site.add_base(admin_class, LocalPreview)
+            site.add_base(admin_class, SetIsActive)
+            site.add_base(admin_class, HideDeleteAction)
 
         site.add_base(admin_class, AutoGroupMeta)
 
