@@ -1,6 +1,6 @@
 from django.contrib.admin import site as admin_site
 
-from basic_models.actions import SetIsActive, HideDeleteAction
+from basic_models.actions import ToggleActive, DeleteRequiresPermission
 from .admin import CreatedUpdatedBy, LocalPreview, AutoGroupMeta
 
 
@@ -23,8 +23,8 @@ class site(object):
 
         if 'is_active' in field_names:
             site.add_base(admin_class, LocalPreview)
-            site.add_base(admin_class, SetIsActive)
-            site.add_base(admin_class, HideDeleteAction)
+            site.add_base(admin_class, ToggleActive)
+            site.add_base(admin_class, DeleteRequiresPermission)
 
         site.add_base(admin_class, AutoGroupMeta)
 

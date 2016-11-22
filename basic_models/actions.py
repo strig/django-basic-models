@@ -40,7 +40,7 @@ class Clone(object):
         _lazy("Clone selected %(verbose_name_plural)s and related instances")
 
 
-class SetIsActive(object):
+class ToggleActive(object):
     actions = ['is_active_true', 'is_active_false']
 
     def _set_is_active(self, is_active, request, queryset):
@@ -65,13 +65,24 @@ class SetIsActive(object):
         "De-activate selected %(verbose_name_plural)s"
 
 
-class HideDeleteAction(object):
+class HideToggleActive(object):
+    def get_actions(self, request):
+        actions = super(HideToggleActive, self).get_actions(request)
+        try:
+            del actions['is_active_true']
+            del actions['is_active_false']
+        except KeyError:
+            pass
+        return actions
+
+
+class DeleteRequiresPermission(object):
 
     def get_actions(self, request):
-        actions = super(HideDeleteAction, self).get_actions(request)
+        actions = super(DeleteRequiresPermission, self).get_actions(request)
         if not self.has_delete_permission(request):
             try:
                 del actions['delete_selected']
-            except AttributeError:
+            except KeyError:
                 pass
         return actions

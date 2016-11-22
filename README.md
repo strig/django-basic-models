@@ -28,9 +28,10 @@ models.py
 
 admin.py
 
+    from basic_models import actions
     from basic_models.admin import site
 
-    class MyModelAdmin(actions.Clone, actions.SetIsActive):
+    class MyModelAdmin(actions.Clone):
         list_display = ('__unicode__', 'is_active')
 
     site.register(MyModel, MyModelAdmin)
