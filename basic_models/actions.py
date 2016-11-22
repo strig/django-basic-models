@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from django.utils.translation import ugettext_lazy as _lazy, ugettext as _
-from django.contrib.admin.util import model_ngettext as model_verbose_name
+from django.contrib.admin.utils import model_ngettext as model_verbose_name
 
 
 class Clone(object):
