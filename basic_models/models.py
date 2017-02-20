@@ -65,7 +65,7 @@ class TitleBody(models.Model):
 
 
 class IsActive(models.Model):
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
 
     objects = models.Manager()
     active_objects = ActiveObjectsManager()
