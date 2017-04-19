@@ -83,5 +83,5 @@ class OnlyOneActive(models.Model):
             self.__class__.objects.filter(is_active=True).exclude(pk=self.pk) \
                 .update(is_active=False)
 
-    def publish(self):
-        super(OnlyOneActive, self).publish()
+    class Meta:
+        abstract = True
