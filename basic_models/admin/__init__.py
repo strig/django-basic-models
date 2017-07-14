@@ -1,7 +1,7 @@
 from django.contrib.admin import site as admin_site
 
 from basic_models.actions import ToggleActive, DeleteRequiresPermission
-from .admin import CreatedUpdatedBy, LocalPreview, AutoGroupMeta
+from .admin import CreatedUpdatedBy, LocalPreview, AutoGroupMeta, UserModelAdmin, DefaultModelAdmin
 
 
 class site(object):
