@@ -15,8 +15,17 @@ from .managers import ActiveObjectsManager
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
-class NameSlug(NaturalKey, models.Model):
-    name = models.CharField(max_length=255)
+class SlugBaseModel(models.Model):
+    name = models.CharField(max_length=1024)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return self.name
+
+
+class NameSlug(SlugBaseModel):
     slug = AutoSlugField(unique=True, populate_from='name')
 
     def __unicode__(self):
